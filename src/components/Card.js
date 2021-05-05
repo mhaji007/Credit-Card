@@ -1,7 +1,55 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ShowCardInfo from "./ShowCardInfo";
+import axios from "axios";
 
-function card() {
+function Card() {
+  const [loading, setLoading] = useState(false);
+  const [cardOverview, setCardOverview] = useState(null);
+  const [cardOverviewError, setCardOverviewError] = useState(null)
+
+  const getCardOverview = async() => {
+    try {
+      setLoading(true);
+      const response = await axios.get(
+        "https://run.mocky.io/v3/570ab08a-61c0-4b75-a69d-c11494e660fd"
+      );
+      console.log("Response from axios ===>", response.data.cardOverview)
+      setLoading(false);
+      setCardOverview(response.data);
+      // console.log("response after setting cardOverview ===>", cardOverview);
+    } catch (err) {
+      setLoading(false);
+      console.log(err);
+      setCardOverviewError(err)
+    }
+      // axios.get(
+      //   "https://run.mocky.io/v3/570ab08a-61c0-4b75-a69d-c11494e660fd"
+      // ).then((response) =>setCardOverview(response.data));
+
+    // console.log("response after setting cardOverview ===>", cardOverview);
+
+  };
+
+
+  useEffect(() => {
+    // fetch("https://run.mocky.io/v3/570ab08a-61c0-4b75-a69d-c11494e660fd")
+    //   .then((res) => res.json())
+    //   .then((data) => setCardOverview(data));
+    const fetchData = async () => {
+      setLoading(true);
+      const result = await axios(
+        "https://run.mocky.io/v3/570ab08a-61c0-4b75-a69d-c11494e660fd"
+      );
+          console.log("Response from axios ===>", result.data);
+      setLoading(false);
+      setCardOverview(result.data);
+    };
+
+    fetchData();
+    //  getCardOverview()
+
+  }, []);
+
   return (
     <div className="outerWrapper">
       <div className="innerWrapper">
@@ -68,7 +116,7 @@ function card() {
           </div>
           <div className="container__col desc">
             <h1>CARD HOLDER</h1>
-            <p>ERIC SAMSON</p>
+           {(!loading&&cardOverview)?cardOverview:"Loading..."}
             <h1>BILLING ADDRESS</h1>
             <p>1882 Gerard Street</p>
             <p>San Fransisco, CA 94108</p>
@@ -79,4 +127,4 @@ function card() {
   );
 }
 
-export default card;
+export default Card;
