@@ -1,8 +1,8 @@
 import React from 'react'
 
-function ShowCardInfo() {
+function ShowCardInfo({cardInfoHandler}) {
   return (
-    <button className="card__info">
+    <button className="card__info" onClick={cardInfoHandler}>
       SHOW CARD INFORMATION
     </button>
   )
