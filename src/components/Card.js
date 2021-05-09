@@ -15,11 +15,7 @@ function Card() {
     try {
       setLoading(true);
       const response = await axios.get(
-        "https://run.mocky.io/v3/570ab08a-61c0-4b75-a69d-c11494e660fd"
-      );
-      console.log(
-        "Proper format ===>",
-        JSON.parse(response.data.slice(0, response.data.length - 3) + "}")
+        `${process.env.REACT_APP_CARD_OVERVIEW_API}`
       );
 
       setLoading(false);
@@ -41,7 +37,7 @@ function Card() {
     try {
       setLoading(true);
       const response = await axios.get(
-        "https://run.mocky.io/v3/d50e1b3b-017b-4f52-abc5-51fdde133048"
+        `${process.env.REACT_APP_CARD_DETAIL_API}`
       );
 
       setLoading(false);
@@ -86,10 +82,18 @@ function Card() {
 
             <div className="card__row">
               <div className="card__col card__balance">
-                {cardOverview &&
+                {cardOverview ? (
                   formatToCurrency
                     .format(cardOverview.remainingBalance)
-                    .replace(/^0+(?!\.)|(?:\.|(\..*?))0+$/gm, "$1")}
+                    .replace(/^0+(?!\.)|(?:\.|(\..*?))0+$/gm, "$1")
+                ) : (
+                  <img
+                    src="balanceloader.gif"
+                    alt="loader image"
+                    width="100px"
+                    height="100px"
+                  />
+                )}
               </div>
 
               <div className="card__col card__chip">
@@ -140,7 +144,7 @@ function Card() {
                 <>
                   <div className="card__col reveal">
                     <label for="cardCcv" className="card__label">
-                      CVC
+                      CVC:
                     </label>
                     <input
                       disabled
@@ -153,7 +157,7 @@ function Card() {
                   </div>
                   <div className="card__col reveal">
                     <label for="cardExpiry" className="card__label">
-                      EXP
+                      EXP:
                     </label>
                     <input
                       disabled
